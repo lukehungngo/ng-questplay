@@ -26,14 +26,14 @@ contract Comparisons {
     /// @notice Returns true if value < 0 or value == 10, false otherwise.
     function isNegativeOrEqualTen(int256 value) public pure returns (bool negativeOrEqualTen) {
         assembly {
-            negativeOrEqualTen := and(lt(value, 0), eq(value, 10))
+            negativeOrEqualTen := or(slt(value, 0), eq(value, 10))
         }
     }
 
     /// @return inRange true if lower <= value <= upper, false otherwise
     function isInRange(int256 value, int256 lower, int256 upper) public pure returns (bool inRange) {
         assembly {
-            inRange := and(not(lt(value, lower)), not(gt(lower, upper)))
+            inRange := and(or(gt(value, lower), eq(value, lower)), or(gt(upper, value), eq(value, upper)))
         }
     }
 }

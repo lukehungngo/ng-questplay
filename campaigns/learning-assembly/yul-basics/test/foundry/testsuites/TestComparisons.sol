@@ -5,14 +5,25 @@ import "forge-std/Test.sol";
 import "../../../contracts/Comparisons.sol";
 
 abstract contract TestComparisons is Test {
-
     Comparisons comparisons;
 
     using stdJson for string;
 
-    struct UPair { uint256 x; uint256 y; }
-    struct Pair { int256 x; int256 y; }
-    struct Triplet { int256 x; int256 y; int256 z; }
+    struct UPair {
+        uint256 x;
+        uint256 y;
+    }
+
+    struct Pair {
+        int256 x;
+        int256 y;
+    }
+
+    struct Triplet {
+        int256 x;
+        int256 y;
+        int256 z;
+    }
 
     string jsonData;
 
@@ -23,11 +34,8 @@ abstract contract TestComparisons is Test {
     }
 
     function test_isZero() external {
-        int256[] memory inputs = abi.decode(
-            jsonData.parseRaw(".isZero"),
-            (int256[])
-        );
-        for (uint i = 0; i < inputs.length; i++) {
+        int256[] memory inputs = abi.decode(jsonData.parseRaw(".isZero"), (int256[]));
+        for (uint256 i = 0; i < inputs.length; i++) {
             int256 x = inputs[i];
             bool result = comparisons.isZero(x);
 
@@ -36,11 +44,8 @@ abstract contract TestComparisons is Test {
     }
 
     function test_greaterThan() external {
-        UPair[] memory inputs = abi.decode(
-            jsonData.parseRaw(".greaterThan"),
-            (UPair[])
-        );
-        for (uint i = 0; i < inputs.length; i++) {
+        UPair[] memory inputs = abi.decode(jsonData.parseRaw(".greaterThan"), (UPair[]));
+        for (uint256 i = 0; i < inputs.length; i++) {
             UPair memory p = inputs[i];
             bool result = comparisons.greaterThan(p.x, p.y);
 
@@ -49,11 +54,8 @@ abstract contract TestComparisons is Test {
     }
 
     function test_signedLowerThan() external {
-        Pair[] memory inputs = abi.decode(
-            jsonData.parseRaw(".signedLowerThan"),
-            (Pair[])
-        );
-        for (uint i = 0; i < inputs.length; i++) {
+        Pair[] memory inputs = abi.decode(jsonData.parseRaw(".signedLowerThan"), (Pair[]));
+        for (uint256 i = 0; i < inputs.length; i++) {
             Pair memory p = inputs[i];
             bool result = comparisons.signedLowerThan(p.x, p.y);
 
@@ -62,12 +64,9 @@ abstract contract TestComparisons is Test {
     }
 
     function test_isNegativeOrEqualTen() external {
-        int256[] memory inputs = abi.decode(
-            jsonData.parseRaw(".isNegativeOrEqualTen"),
-            (int256[])
-        );
-        for (uint i = 0; i < inputs.length; i++) {
-            int256 x =inputs[i];
+        int256[] memory inputs = abi.decode(jsonData.parseRaw(".isNegativeOrEqualTen"), (int256[]));
+        for (uint256 i = 0; i < inputs.length; i++) {
+            int256 x = inputs[i];
             bool result = comparisons.isNegativeOrEqualTen(x);
 
             assertEq(result, x < 0 || x == 10, "Unexpected Result");
@@ -75,14 +74,10 @@ abstract contract TestComparisons is Test {
     }
 
     function test_isInRange() external {
-        Triplet[] memory inputs = abi.decode(
-            jsonData.parseRaw(".isInRange"),
-            (Triplet[])
-        );
-        for (uint i = 0; i < inputs.length; i++) {
+        Triplet[] memory inputs = abi.decode(jsonData.parseRaw(".isInRange"), (Triplet[]));
+        for (uint256 i = 0; i < inputs.length; i++) {
             Triplet memory t = inputs[i];
             bool result = comparisons.isInRange(t.x, t.y, t.z);
-
             assertEq(result, t.x >= t.y && t.x <= t.z, "Unexpected Result");
         }
     }
